@@ -31,10 +31,10 @@ public class ParkingLotController {
         List<ParkingLot> parkingLots = parkingLotService.checkAllParkingLots();
         return ResponseEntity.status(HttpStatus.OK).body(parkingLots);
     }
-    @DeleteMapping(path = "/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity checkAParkingLot(@PathVariable String id){
-        parkingLotService.checkSpecificParkingLot(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        ParkingLot parkingLot = parkingLotService.checkSpecificParkingLot(id);
+        return ResponseEntity.status(HttpStatus.OK).body(parkingLot);
     }
 
 }
