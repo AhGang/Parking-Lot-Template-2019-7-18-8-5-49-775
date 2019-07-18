@@ -1,6 +1,7 @@
 package com.thoughtworks.parking_lot;
 
 import com.thoughtworks.parking_lot.entity.ParkingLot;
+import com.thoughtworks.parking_lot.repository.ParkingLotRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -33,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ParkingLotApplicationTests {
     @Autowired
     private MockMvc mockMvc;
-
+    @Autowired
+    private ParkingLotRepository parkingLotRepository;
     @Test
     public void should_add_an_parking_lot_when_post_a_parking_lot() throws Exception {
         //Given
@@ -74,6 +76,51 @@ public class ParkingLotApplicationTests {
                     contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isCreated()).andReturn();
         } );
     }
+
+    @Test
+    public void should_delete_a_parking_lot_when_give_a_specific__id_() throws Exception {
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A","zhu",200);
+        ParkingLot parkingLotB = new ParkingLot("B","zhu",200);
+        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+        //When
+        ParkingLot parkingLot = parkingLotRepository.save(parkingLotA);
+        String specificID = parkingLot.getId();
+        parkingLotRepository.save(parkingLotB);
+        this.mockMvc.perform(delete("/parking-lots/"+specificID).contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isOk()).andReturn();
+        List<ParkingLot> parkingLots = parkingLotRepository.findAll();
+        //Then
+        assertEquals(1, parkingLots.size());
+    }
+    @Test
+    public void should_check_a_parking_lot_when_give_a_specific__id_() throws Exception {
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A","zhu",200);
+        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+        //When
+        ParkingLot parkingLot = parkingLotRepository.save(parkingLotA);
+        String specificID = parkingLot.getId();
+        this.mockMvc.perform(get("/parking-lots/"+specificID).contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isOk()).andReturn();
+        //Then
+        assertEquals(parkingLotA.getName(),parkingLotRepository.findById(specificID).get().getName());
+    }
+
+//    @Test
+//    public void should_update_a_parking_lot_when_give_a_specific__id_() throws Exception {
+//        //Given
+//        ParkingLot parkingLotA = new ParkingLot("A","zhu",200);
+//        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+//        //When
+//        ParkingLot parkingLot = parkingLotRepository.save(parkingLotA);
+//        parkingLot.setCapacity(500);
+//        parkingLotRepository.save(parkingLot);
+//        String specificID = parkingLot.getId();
+//        final MvcResult mvcResult = this.mockMvc.perform(put("/parking-lots/"+specificID).
+//                contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isOk()).andReturn();
+//        JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
+//        //Then
+//        assertEquals(parkingLot.getName(),jsonObject.getN);
+//    }
 
 }
 

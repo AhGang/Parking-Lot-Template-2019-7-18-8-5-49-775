@@ -37,9 +37,9 @@ public class ParkingLotController {
         return ResponseEntity.status(HttpStatus.OK).body(parkingLot);
     }
     @PutMapping(path = "/{id}")
-    public ResponseEntity updateAParkingLot(@PathVariable String id){
-        ParkingLot parkingLot = parkingLotService.updateAParkingLot(id);
-        return ResponseEntity.status(HttpStatus.OK).body(parkingLot);
+    public ResponseEntity updateAParkingLot(@RequestBody ParkingLot parkingLot){
+        ParkingLot parkingLotA = parkingLotService.updateAParkingLot(parkingLot);
+        return ResponseEntity.status(HttpStatus.OK).body(parkingLotA);
     }
 
 }
