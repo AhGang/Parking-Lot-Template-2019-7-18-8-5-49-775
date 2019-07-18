@@ -105,22 +105,21 @@ public class ParkingLotApplicationTests {
         assertEquals(parkingLotA.getName(),parkingLotRepository.findById(specificID).get().getName());
     }
 
-//    @Test
-//    public void should_update_a_parking_lot_when_give_a_specific__id_() throws Exception {
-//        //Given
-//        ParkingLot parkingLotA = new ParkingLot("A","zhu",200);
-//        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
-//        //When
-//        ParkingLot parkingLot = parkingLotRepository.save(parkingLotA);
-//        parkingLot.setCapacity(500);
-//        parkingLotRepository.save(parkingLot);
-//        String specificID = parkingLot.getId();
-//        final MvcResult mvcResult = this.mockMvc.perform(put("/parking-lots/"+specificID).
-//                contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isOk()).andReturn();
-//        JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
-//        //Then
-//        assertEquals(parkingLot.getName(),jsonObject.getN);
-//    }
+    @Test
+    public void should_update_a_parking_lot_when_give_a_specific__id_() throws Exception {
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A","zhu",200);
+        //When
+        ParkingLot parkingLot = parkingLotRepository.save(parkingLotA);
+        parkingLot.setCapacity(500);
+        String specificID = parkingLot.getId();
+        parkingLotRepository.save(parkingLot);
+        JSONObject parkingLotJsonObject = new JSONObject(parkingLot);
+        this.mockMvc.perform(put("/parking-lots/"+specificID).contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isOk()).andReturn();
+        ParkingLot resultParkingLot = parkingLotRepository.findById(specificID).get();
+        //Then
+        assertEquals(parkingLot.getCapacity(),resultParkingLot.getCapacity());
+    }
 
 }
 

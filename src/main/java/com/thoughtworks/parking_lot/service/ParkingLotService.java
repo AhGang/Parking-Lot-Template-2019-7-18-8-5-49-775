@@ -34,12 +34,12 @@ public class ParkingLotService {
         parkingLotRepository.deleteById(id);
     }
     public ParkingLot updateAParkingLot(ParkingLot parkingLot) {
+        ParkingLot savedParkingLot = parkingLotRepository.save(parkingLot);
         List<ParkingLot> parkingLots = parkingLotRepository.findAll();
-        List<ParkingLot> resultParkingLotList = parkingLots.stream().filter(e ->(e.getId() == parkingLot.getId() )).collect(Collectors.toList());
+        List<ParkingLot> resultParkingLotList = parkingLots.stream().filter(e ->(e.getId() == savedParkingLot.getId() )).collect(Collectors.toList());
         ParkingLot parkingLotA = resultParkingLotList.get(0);
         parkingLot.setCapacity(500);
         parkingLotRepository.save(parkingLotA);
-
         return parkingLot;
     }
 }
