@@ -6,10 +6,9 @@ import com.thoughtworks.parking_lot.service.ParkingLotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/parking-lots")
@@ -21,6 +20,21 @@ public class ParkingLotController {
     public ResponseEntity createAParkingLot(@RequestBody ParkingLot parkingLot){
         parkingLotService.addParkingLot(parkingLot);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity deleteAParkingLot(@PathVariable String id){
+        parkingLotService.deleteAParkingLot(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    @GetMapping
+    public ResponseEntity checkAllParkingLots(){
+        List<ParkingLot> parkingLots = parkingLotService.checkAllParkingLots();
+        return ResponseEntity.status(HttpStatus.OK).body(parkingLots);
+    }
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity checkAParkingLot(@PathVariable String id){
+        parkingLotService.checkSpecificParkingLot(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
