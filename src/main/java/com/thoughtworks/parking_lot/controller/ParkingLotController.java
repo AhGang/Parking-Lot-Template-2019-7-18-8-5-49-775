@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ParkingLotController {
 
     @Autowired
-    private  ParkingLotRepository parkingLotRepository;
-
+    private ParkingLotService parkingLotService;
     @PostMapping
     public ResponseEntity createAParkingLot(@RequestBody ParkingLot parkingLot){
-        parkingLotRepository.save(parkingLot);
-        return ResponseEntity.status(HttpStatus.CREATED).body(parkingLot);
+        parkingLotService.addParkingLot(parkingLot);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

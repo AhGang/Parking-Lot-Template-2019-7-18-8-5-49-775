@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,18 +33,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ParkingLotApplicationTests {
     @Autowired
     private MockMvc mockMvc;
+
     @Test
     public void should_add_an_parking_lot_when_post_a_parking_lot() throws Exception {
-        ParkingLot parkingLotA = new ParkingLot("A","zhu",6000);
-
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A", "zhu", 6000);
         JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+        //When
         final MvcResult mvcResult = this.mockMvc.perform(post("/parking-lots").
                 contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isCreated()).andReturn();
         JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
+        //Then
         assertEquals("A", jsonObject.getString("name"));
         assertEquals("zhu", jsonObject.getString("location"));
         assertEquals(6000, jsonObject.getInt("capacity"));
     }
 
+    @Test
+    public void should_throw_exception_when_post_a_same_name_parking_lot() throws Exception {
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A", "zhu", 6000);
+        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+        this.mockMvc.perform(post("/parking-lots").contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isCreated()).andReturn();
+        ParkingLot parkingLotB = new ParkingLot("A", "guang", 7000);
+        JSONObject parkingLotJsonObjectB = new JSONObject(parkingLotA);
+        //When&Then
+        Assertions.assertThrows(Exception.class, () -> {
+            this.mockMvc.perform(post("/parking-lots").
+                    contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObjectB.toString())).andExpect(status().isCreated()).andReturn();
+        });
+    }
+    @Test
+    public void should_throw_exception_when_post_a_nagetive_capacity_parking_lot() throws Exception {
+        //Given
+        ParkingLot parkingLotA = new ParkingLot("A","zhu",-10);
+        JSONObject parkingLotJsonObject = new JSONObject(parkingLotA);
+        //When&Then
+        Assertions.assertThrows(Exception.class, ()-> {
+            this.mockMvc.perform(post("/parking-lots").
+                    contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8).content(parkingLotJsonObject.toString())).andExpect(status().isCreated()).andReturn();
+        } );
+    }
 
 }
+
