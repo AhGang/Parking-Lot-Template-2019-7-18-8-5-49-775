@@ -26,9 +26,9 @@ public class ParkingLotController {
         parkingLotService.deleteAParkingLot(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-    @GetMapping
-    public ResponseEntity checkAllParkingLots(){
-        List<ParkingLot> parkingLots = parkingLotService.checkAllParkingLots();
+    @GetMapping(params = {"page","pageSize"})
+    public ResponseEntity checkAllParkingLots(@RequestParam int page,@RequestParam int pageSize){
+        List<ParkingLot> parkingLots = parkingLotService.checkAllParkingLotsAtSpecificPages(page,pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(parkingLots);
     }
     @GetMapping(path = "/{id}")

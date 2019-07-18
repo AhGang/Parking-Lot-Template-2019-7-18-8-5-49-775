@@ -21,9 +21,11 @@ public class ParkingLotService {
 
     }
 
-    public List<ParkingLot> checkAllParkingLots() {
-        List<ParkingLot> parkingLots = new ArrayList<>();
-        return parkingLotRepository.findAll();
+    public List<ParkingLot> checkAllParkingLotsAtSpecificPages(int page,int pageSize) {
+        List<ParkingLot> parkingLots = parkingLotRepository.findAll();
+        List<ParkingLot> resultparkingLots = parkingLots.stream().skip((page-1) * pageSize).limit(pageSize).collect(Collectors.toList());
+        return resultparkingLots;
+
 
     }
     public ParkingLot checkSpecificParkingLot(String id) {
