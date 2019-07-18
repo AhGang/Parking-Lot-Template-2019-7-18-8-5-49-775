@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ParkingLotService {
@@ -32,7 +33,13 @@ public class ParkingLotService {
     public void deleteAParkingLot(String id) {
         parkingLotRepository.deleteById(id);
     }
-    public ResponseEntity putAParkingLot(String id) {
-        return null;
+    public ParkingLot updateAParkingLot(String id) {
+        List<ParkingLot> parkingLots = parkingLotRepository.findAll();
+        List<ParkingLot> resultParkingLotList = parkingLots.stream().filter(e ->(e.getId() == id )).collect(Collectors.toList());
+        ParkingLot parkingLot = resultParkingLotList.get(0);
+        parkingLot.setCapacity(500);
+        parkingLotRepository.save(parkingLot);
+
+        return parkingLot;
     }
 }

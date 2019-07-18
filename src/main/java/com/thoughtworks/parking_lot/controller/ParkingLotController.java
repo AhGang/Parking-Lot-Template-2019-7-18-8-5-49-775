@@ -36,5 +36,10 @@ public class ParkingLotController {
         ParkingLot parkingLot = parkingLotService.checkSpecificParkingLot(id);
         return ResponseEntity.status(HttpStatus.OK).body(parkingLot);
     }
+    @PutMapping(path = "/{id}")
+    public ResponseEntity updateAParkingLot(@PathVariable String id){
+        ParkingLot parkingLot = parkingLotService.updateAParkingLot(id);
+        return ResponseEntity.status(HttpStatus.OK).body(parkingLot);
+    }
 
 }
