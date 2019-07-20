@@ -7,6 +7,7 @@ import com.thoughtworks.parking_lot.repository.ParkingOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -19,11 +20,17 @@ public class ParkingOrderService {
         ParkingLot parkingLot = parkingLotRepository.findByName(parkingOrder.getParkingLotName());
         List<ParkingOrder> parkingOrders = parkingOrderRepository.findByStatusAndParkingLotName(true,parkingOrder.getParkingLotName());
         if(parkingOrders.size()< parkingLot.getCapacity()){
-           // parkingOrder.setParkingLot(parkingLot);
             parkingOrderRepository.save(parkingOrder);
             return true;
         }else{
             return false;
         }
+    }
+
+    public void updateParkingOrderService(String carNumber) {
+        ParkingOrder parkingOrder = parkingOrderRepository.findByCarNumber(carNumber);
+        parkingOrder.setEndTime(new Date());
+        parkingOrder.setStatus(false);
+        parkingOrderRepository.save(parkingOrder);
     }
 }
