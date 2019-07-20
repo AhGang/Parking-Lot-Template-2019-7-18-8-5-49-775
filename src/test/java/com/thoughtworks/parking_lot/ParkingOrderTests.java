@@ -49,6 +49,7 @@ public class ParkingOrderTests {
     @Before
     public void befroe_test(){
         parkingOrderRepository.deleteAll();
+        parkingLotRepository.deleteAll();
     }
     @Test
     public void should_add_an_parking_order_when_post_a_parking_order() throws Exception{
