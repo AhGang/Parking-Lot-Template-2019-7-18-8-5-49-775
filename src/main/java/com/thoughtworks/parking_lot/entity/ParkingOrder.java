@@ -11,11 +11,13 @@ public class ParkingOrder {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
     private String id;
-    private String name;
+    private String parkingLotName;
     private String carNumber;
     private Date creationTime;
     private Date endTime;
     private boolean status;
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parking_lot_id")
     private ParkingLot parkingLot;
@@ -24,19 +26,18 @@ public class ParkingOrder {
     public ParkingOrder() {
     }
 
-    public ParkingOrder(String name, String carNumber, boolean status, ParkingLot parkingLot) {
-        this.name = name;
+    public ParkingOrder(String parkingLotName, String carNumber, boolean status) {
+        this.parkingLotName = parkingLotName;
         this.carNumber = carNumber;
         this.status = status;
-        this.parkingLot = parkingLot;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getParkingLotName() {
+        return parkingLotName;
     }
 
     public String getCarNumber() {
@@ -53,5 +54,36 @@ public class ParkingOrder {
 
     public boolean isStatus() {
         return status;
+    }
+    public ParkingLot getParkingLot() {
+        return parkingLot;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setParkingLotName(String parkingLotName) {
+        this.parkingLotName = parkingLotName;
+    }
+
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
     }
 }
